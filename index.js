@@ -146,7 +146,7 @@ applyChart(fourthGroupData, "fourth-group", 3);
 applyChart(fifthGroupData, "fifth-group", 4);
 applyChart(firstGroupData, "first-group", 0);
 //function to create the dots for the chart
-let applyDots = (data, name, colorIndex, r = 7) => {
+let applyDots = (data, name, index, r = 7) => {
   lineChartSVG
     .append("g")
     .attr("class", `${name}-dots`)
@@ -168,11 +168,11 @@ let applyDots = (data, name, colorIndex, r = 7) => {
     .attr("data-year", (d) => {
       return d.date;
     })
-    .style("fill", lineChartColors[colorIndex]);
+    .style("fill", lineChartColors[index]);
 
   let lineChartDots = document.querySelectorAll(`.${name}-dots circle`);
   for (let i = 0; i < lineChartDots.length; i++) {
-    lineChartDots[i].dataset.age = lineChartLegendLabels[i];
+    lineChartDots[i].dataset.age = lineChartLegendLabels[index];
     let tooltip = document.querySelector(".line-chart-wrapper .tooltip");
     lineChartDots[i].addEventListener("mouseenter", (event) => {
       event.target.style.strokeWidth = "3px"
