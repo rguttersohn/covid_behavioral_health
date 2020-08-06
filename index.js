@@ -72,7 +72,9 @@ const fifthGroupData = [
   { date: "June 25-July 21", rate: 26 },
 ];
 
-const lineChartColors = ["#009966", "#99ccff", "#ccffff", "#cc9999", "#ffcccc"];
+const lineChartColors = ["#0099cd", "#8da7f6", "#f1afff", "#ff5fa6", "#ea0029"];
+
+lineChartColors.reverse()
 
 const lineChartLegendLabels = [
   "18 to 24",
@@ -124,7 +126,7 @@ const yAxis = lineChartSVG
   .append("g")
   .attr("class", "y-axis")
   .attr("transform", `translate(${margin.left},0)`)
-  .call(d3.axisLeft(yScale).tickFormat((d) => d + "%"));
+  .call(d3.axisLeft(yScale).tickFormat((d) => d + "%").ticks(5));
 
 let applyChart = (data, name, colorIndex) => {
   lineChartSVG
@@ -173,16 +175,29 @@ let applyDots = (data, name, colorIndex, r = 7) => {
     lineChartDots[i].dataset.age = lineChartLegendLabels[i];
     let tooltip = document.querySelector(".line-chart-wrapper .tooltip");
     lineChartDots[i].addEventListener("mouseenter", (event) => {
+      event.target.style.strokeWidth = "3px"
+      event.target.style.stroke = event.target.style.fill
       tooltip.style.display = "block";
       tooltip.style.opacity = 1;
       tooltip.style.left = `${event.clientX}px`;
       tooltip.style.top = `${event.clientY * 1.1}px`;
-      tooltip.innerHTML = `<i style="background-color:${event.target.style.fill}"></i> Age Range: ${event.target.dataset.age}<br>Date Range: ${event.target.dataset.year}<br>Percent Reported: ${event.target.dataset.percent}<br>`;
+      tooltip.innerHTML = `<div class="tooltip-interior">
+                            <div>
+                              <i style="background-color:${event.target.style.fill}"></i>
+                            </div> 
+                            <div>
+                              <p>Age Range: ${event.target.dataset.age}</p>
+                              <p>Date Range: ${event.target.dataset.year}</p>
+                              <p>Percent Reported: ${event.target.dataset.percent}<p>
+                            </div>
+                          </div>`;
     });
-    lineChartDots[i].addEventListener("mouseleave", ()=>{
-        tooltip.style.display = "none";
+    lineChartDots[i].addEventListener("mouseleave", (event) => {
+      tooltip.style.display = "none";
       tooltip.style.opacity = 0;
-    })
+      event.target.style.strokeWidth = null;
+      event.target.style.stroke = null;
+    });
   }
 };
 
@@ -227,4 +242,18 @@ const lineChartLegendText = document.querySelectorAll(
 for (let i = 0; i < lineChartIcons.length; i++) {
   lineChartIcons[i].style.backgroundColor = lineChartColors[i];
   lineChartLegendText[i].textContent = lineChartLegendLabels[i];
+}
+
+
+//js for the pull quotes textContent 
+
+pullQuotesArray = ["Americans stand at a precipice, with many of the federal COVID relief benefits having expired at the end of July.",
+"Without additional financial support, even more families and their children will suffer the psychological and emotional harms of economic distress, on top of anxieties related to isolation, loss of loved ones, and widespread uncertainty.",
+"Only by investing in children now can we avoid the long-term repercussions of trauma and unmet mental health needs.",
+"New flexibilities to provide telehealth services have been a lifeline for many children and families, allowing them to stay connected to the critical health and behavioral health supports they need.",
+"New York cannot afford to be short-sighted by scaling back on existing school-based behavioral health resources; in fact, now is the time to invest more in the student supports so they can thrive social emotionally and academically."]
+
+let pullQuotes = document.querySelectorAll('.pull-quote p')
+for (let i =0;i<pullQuotes.length;i++){
+  pullQuotes[i].textContent = pullQuotesArray[i]
 }
